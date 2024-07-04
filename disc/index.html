@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DISC Personality Test(请按第一印象最快的选择)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .name-container, .question-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .question-container {
+            display: none;
+        }
+        .title {
+            font-size: 22px;
+            color: #0b5394;
+            font-weight: 600;
+            margin-top: 0px;
+            margin-bottom: 50px;
+        }
+        .answer {
+            cursor: pointer;
+            color: #555;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: left;
+            padding: 15px;
+            border: 2px solid #c8c8c8;
+        }
+        .answer:hover {
+            background-color: #f0f0f0;
+        }
+        .footer-text {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-size: 8px;
+            color: #808080;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .highlight {
+            border: 2px solid green;
+        }
+    </style>
+</head>
+<body>
+
+<div id="name-container" class="name-container">
+    <h2>请输入您的姓名</h2>
+    <input type="text" id="user-name" placeholder="姓名" />
+    <button onclick="submitName()">确认</button>
+</div>
+
+<div id="questions-container" class="question-container">
+    <div id="question-title" class="title"></div>
+    <div id="answers-container"></div>
+</div>
+
+<div class="footer-text">
+    <p>注意：请按第一印象最快的选择，如果不能确定，可回忆童年时的情况，或者以你最熟悉的人对你的评价来从中选择。</p>
+</div>
+<script src="disc_test.js"></script>
+</body>
+</html>
