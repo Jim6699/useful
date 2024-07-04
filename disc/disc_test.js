@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const answersContainer = document.getElementById('answers-container');
 
     let currentQuestionIndex = 0;
+    let score = { D: 0, I: 0, S: 0, C: 0 };
+    let userName = '';
     const questions = [
         {
             question: "1. 您更符合哪一项？",
@@ -367,9 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         }
     ];
-
     window.submitName = function() {
-        const userName = document.getElementById('user-name').value;
+        userName = document.getElementById('user-name').value;
         if (userName.trim() !== '') {
             nameContainer.style.display = 'none';
             questionsContainer.style.display = 'block';
@@ -387,23 +388,53 @@ document.addEventListener('DOMContentLoaded', () => {
             const answerElement = document.createElement('div');
             answerElement.classList.add('answer');
             answerElement.innerText = answer.text;
-            answerElement.addEventListener('click', () => selectAnswer(answerElement));
+            answerElement.addEventListener('click', () => selectAnswer(answerElement, answer.value));
             answersContainer.appendChild(answerElement);
         });
     }
 
-    function selectAnswer(element) {
+    function selectAnswer(element, value) {
         const answers = document.querySelectorAll('.answer');
         answers.forEach(answer => answer.classList.remove('highlight'));
         element.classList.add('highlight');
+        score[value]++;
         setTimeout(() => {
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 loadQuestion(currentQuestionIndex);
             } else {
-                alert('测试完成，谢谢参与！');
-                // 这里可以添加提交或显示结果的代码
+                showResults();
             }
         }, 500);
+    }
+
+    function showResults() {
+        questionsContainer.innerHTML = '<h2>测试完成，谢谢参与！</h2>';
+        const result = `姓名: ${userName}  \nD: ${score.D}, I: ${score.I}, S: ${score.S}, C: ${score.C}`;
+        questionsContainer.innerHTML += `<p>${result}</p>`;
+        sendResultToWeChat(userName, score);
+    }
+
+    function sendResultToWeChat(name, score) {
+        const data = {
+            name: name,
+            score: score
+        };
+        fetch('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=2727181b-9456-494f-98db-9eb1391da96d', {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                msgtype: 'text',
+                text: {
+                    content: `姓名: ${data.name}\nD: ${data.score.D}, I: ${data.score.I}, S: ${data.score.S}, C: ${data.score.C}`
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log('成功:', data))
+        .catch(error => console.error('错误:', error));
     }
 });
